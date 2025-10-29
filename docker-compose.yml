@@ -1,0 +1,52 @@
+version: '3.8' # Especifica la versión de Docker Compose
+
+services:
+  
+  # Servicio 1: La Aplicación (JavaScript/Node.js)
+  app:
+    build: ./app
+    container_name: tablero-app
+    ports:
+      - "3000:3000" # Mapea el puerto 3000 de tu PC al 3000 del contenedor
+    environment:
+      # Variables de entorno que pasamos a Node.js (al index.js)
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASSWORD=mi_contraseña_secreta
+      - DB_NAME=indicadores_db
+    depends_on:
+      # Le dice a Docker que espere a que el 'healthcheck' de 'db' sea exitoso
+      db:
+        condition: service_healthy
+    networks:
+      - mi-red-tablero
+
+  # Servicio 2: La Base de Datos (MySQL)
+  db:
+    image: mysql:8.0
+    container_name: tablero-db
+    environment:
+      # Variables para crear la BD y la contraseña de root
+      - MYSQL_ROOT_PASSWORD=mi_contraseña_secreta # Debe ser la misma de arriba
+      - MYSQL_DATABASE=indicadores_db           # Nombre de la BD que se creará
+    ports:
+      - "3306:3306" # (Opcional) Mapea el puerto
+    volumes:
+      - mysql-data:/var/lib/mysql # Guarda los datos de la BD
+    networks:
+      - mi-red-tablero
+    # Healthcheck para verificar que MySQL esté listo para aceptar conexiones
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-u", "root", "-pmi_contraseña_secreta"]
+      interval: 5s   # Revisa cada 5 segundos
+      timeout: 5s    # Espera 5 segundos por la respuesta
+      retries: 20  # Intenta 20 veces antes de marcar como "unhealthy"
+
+# Docker Compose crea una red interna para que los contenedores se vean
+networks:
+  mi-red-tablero:
+    driver: bridge
+
+# Docker Compose maneja los volúmenes para persistir datos
+volumes:
+  mysql-data:
