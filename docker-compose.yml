@@ -7,7 +7,7 @@ services:
     build: ./app
     container_name: tablero-app
     ports:
-      - "3000:3000" # Mapea el puerto 3000 de tu PC al 3000 del contenedor
+      - "3000:3000" # Mapea el puerto 3000 del PC al 3000 del contenedor
     environment:
       # Variables de entorno que pasamos a Node.js (al index.js)
       - DB_HOST=db
@@ -21,16 +21,16 @@ services:
     networks:
       - mi-red-tablero
 
-  # Servicio 2: La Base de Datos (MySQL)
+  # Servicio 2: Base de Datos (MySQL)
   db:
     image: mysql:8.0
     container_name: tablero-db
     environment:
-      # Variables para crear la BD y la contraseña de root
-      - MYSQL_ROOT_PASSWORD=mi_contraseña_secreta # Debe ser la misma de arriba
+      # Variable para crear la BD y la contraseña de root
+      - MYSQL_ROOT_PASSWORD=mi_contraseña_secreta # Debe ser la misma asignda
       - MYSQL_DATABASE=indicadores_db           # Nombre de la BD que se creará
     ports:
-      - "3306:3306" # (Opcional) Mapea el puerto
+      - "3306:3306" # Mapea el puerto
     volumes:
       - mysql-data:/var/lib/mysql # Guarda los datos de la BD
     networks:

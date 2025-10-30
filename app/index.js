@@ -9,14 +9,13 @@ const dbConfig = {
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  // Opciones mágicas del Pool:
+  // Opciones del Pool:
   waitForConnections: true, // Esperar si no hay conexiones disponibles
   connectionLimit: 10,      // Número de conexiones en el pool
   queueLimit: 0             // Sin límite de consultas en cola
 };
 
-// 1. Ya NO usamos createConnection ni handleDisconnect
-// En su lugar, creamos un POOL.
+// creamos un POOL.
 const pool = mysql.createPool(dbConfig);
 
 console.log('Pool de conexiones de MySQL creado.');
@@ -40,12 +39,11 @@ app.get('/', (req, res) => {
 // Ruta para probar la BD
 app.get('/test-db', (req, res) => {
   
-  // 3. Ya NO revisamos 'connection.state'.
-  // Simplemente le pedimos al POOL que haga la consulta.
+  // el POOL hace la consulta.
   // Si la BD no está lista, el pool pondrá esta consulta en cola.
   pool.query('SELECT 1 + 1 AS solution', (err, results) => {
     
-    // Si hay un error EN LA CONSULTA (ej: la BD se cayó)
+    // Si hay un error EN LA CONSULTA
     if (err) {
       console.error('Error al consultar la BD:', err);
       return res.status(503).send('Error al consultar la BD: ' + err.message);

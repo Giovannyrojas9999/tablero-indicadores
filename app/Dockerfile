@@ -1,4 +1,4 @@
-# Usamos una imagen oficial de Node.js (versión 18, ligera)
+# Usamos una imagen oficial de Node.js (versión 18,)
 FROM node:18-alpine
 
 # Creamos el directorio de trabajo dentro del contenedor
@@ -11,10 +11,10 @@ COPY package*.json ./
 # Instalamos las dependencias
 RUN npm install
 
-# Ahora sí, copiamos el resto del código de la aplicación (el index.js)
+# copiamos el resto del código de la aplicación (el index.js)
 COPY . .
 
-# Exponemos el puerto 3000 (el que usa Express en tu index.js)
+# Exponemos el puerto 3000 (el que usa Express en el index.js)
 EXPOSE 3000
 
 # El comando para iniciar la aplicación cuando arranque el contenedor
