@@ -1,7 +1,7 @@
 const express = require('express');
 const mysql = require('mysql2');
 const path = require('path');
-const fs = require('fs'); // Importamos sistema de archivos para depurar
+const fs = require('fs'); 
 const app = express();
 const port = 3000;
 
@@ -18,30 +18,30 @@ const dbConfig = {
 
 const pool = mysql.createPool(dbConfig);
 
-// === ZONA DE DEPURACIÓN ===
+
 const publicPath = path.join(__dirname, 'public');
 console.log('************************************************');
 console.log('👀 DIAGNÓSTICO DE INICIO');
 console.log('📂 Ruta base:', __dirname);
 console.log('📂 Ruta public esperada:', publicPath);
 
-// Verificamos qué archivos hay realmente en el contenedor
+
 try {
   console.log('📄 Archivos en raíz:', fs.readdirSync(__dirname));
   if (fs.existsSync(publicPath)) {
     console.log('📄 Archivos en public:', fs.readdirSync(publicPath));
   } else {
-    console.error('❌ ERROR CRÍTICO: ¡La carpeta public NO EXISTE en el contenedor!');
+    console.error(' ERROR: ¡La carpeta public NO EXISTE en el contenedor!');
   }
 } catch (e) {
   console.error('Error leyendo archivos:', e);
 }
 console.log('************************************************');
 
-// 1. Servir archivos estáticos
+
 app.use(express.static(publicPath));
 
-// 2. Ruta explícita para la raíz (Respaldo)
+
 app.get('/', (req, res) => {
   res.sendFile(path.join(publicPath, 'index.html'), (err) => {
     if (err) {
@@ -59,5 +59,5 @@ app.get('/test-db', (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`🚀 Servidor corriendo con CÓDIGO NUEVO en http://localhost:${port}`);
+  console.log(` Servidor corriendo en http://localhost:${port}`);
 });
