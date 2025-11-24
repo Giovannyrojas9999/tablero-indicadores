@@ -1,0 +1,17 @@
+*(Esto le dice a Docker: "Ignora mi carpeta node_modules local, no intentes copiarla").*
+
+#### 2. Verificar tu `Dockerfile`
+
+Asegúrate de que tu `app/Dockerfile` siga teniendo la instrucción `RUN npm install`. Como ahora ignoramos la carpeta local, Docker estará obligado a ejecutar la instalación limpia.
+
+Tu `app/Dockerfile` debería verse así (confírmalo):
+
+```dockerfile
+FROM node:18-alpine
+WORKDIR /usr/src/app
+COPY package*.json ./
+RUN npm install
+COPY . .
+# (Opcional: si agregaste la línea extra COPY public ./public, déjala, no estorba)
+EXPOSE 3000
+CMD [ "node", "index.js" ]
