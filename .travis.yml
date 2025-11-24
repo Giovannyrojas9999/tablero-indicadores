@@ -4,7 +4,5 @@ node_js:
 services:
   - docker
 script:
-  - docker-compose build
-  - docker-compose up -d
-  - sleep 10
-  - curl http://localhost:3000
+  - docker build -t tablero-app ./app
+  - docker run --rm tablero-app npm test
