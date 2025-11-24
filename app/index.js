@@ -21,15 +21,15 @@ const pool = mysql.createPool(dbConfig);
 
 const publicPath = path.join(__dirname, 'public');
 console.log('************************************************');
-console.log('👀 DIAGNÓSTICO DE INICIO');
-console.log('📂 Ruta base:', __dirname);
-console.log('📂 Ruta public esperada:', publicPath);
+console.log('DIAGNÓSTICO DE INICIO');
+console.log('Ruta base:', __dirname);
+console.log('Ruta public esperada:', publicPath);
 
 
 try {
-  console.log('📄 Archivos en raíz:', fs.readdirSync(__dirname));
+  console.log(' Archivos en raíz:', fs.readdirSync(__dirname));
   if (fs.existsSync(publicPath)) {
-    console.log('📄 Archivos en public:', fs.readdirSync(publicPath));
+    console.log(' Archivos en public:', fs.readdirSync(publicPath));
   } else {
     console.error(' ERROR: ¡La carpeta public NO EXISTE en el contenedor!');
   }
