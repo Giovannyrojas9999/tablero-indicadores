@@ -5,7 +5,7 @@ services:
     build: ./app  # Construye usando el Dockerfile en la carpeta /app
     container_name: tablero-app
     ports:
-      - "3000:3000" # Puerto para ver el Dashboard en http://localhost:3000
+      - "3000:3000" # Puerto en http://localhost:3000
     environment:
       - DB_HOST=db
       - DB_USER=root
@@ -17,9 +17,7 @@ services:
     networks:
       - mi-red-tablero
 
-  # -------------------------------------------------
-  # SERVICIO 2: LA BASE DE DATOS (MySQL)
-  # -------------------------------------------------
+  
   db:
     image: mysql:8.0
     container_name: tablero-db
@@ -38,9 +36,7 @@ services:
       timeout: 5s
       retries: 20
 
-  # -------------------------------------------------
-  # SERVICIO 3: JENKINS (Automatización CI/CD)
-  # -------------------------------------------------
+  
   jenkins:
     image: jenkins/jenkins:lts
     container_name: jenkins-ci

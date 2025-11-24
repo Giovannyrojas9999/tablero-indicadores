@@ -43,7 +43,7 @@ pipeline {
         stage('Despliegue') {
             steps {
                 script {
-                    // Bajamos contenedores viejos y limpiamos huérfanos
+                    // Bajamos contenedores viejos y limpiamos 
                     bat "docker-compose down --remove-orphans"
                     
                     // Aseguramos que no queden contenedores bloqueados 
