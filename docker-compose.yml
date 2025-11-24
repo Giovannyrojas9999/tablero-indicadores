@@ -1,52 +1,65 @@
-version: '3.8' 
+version: '3.8'
 
 services:
-  
-
   app:
-    build: ./app
+    build: ./app  # Construye usando el Dockerfile en la carpeta /app
     container_name: tablero-app
     ports:
-      - "3000:3000" 
+      - "3000:3000" # Puerto para ver el Dashboard en http://localhost:3000
     environment:
-     
       - DB_HOST=db
       - DB_USER=root
       - DB_PASSWORD=mi_contraseña_secreta
       - DB_NAME=indicadores_db
     depends_on:
-     
       db:
-        condition: service_healthy
+        condition: service_healthy # Espera a que la BD esté lista
     networks:
       - mi-red-tablero
 
-  
+  # -------------------------------------------------
+  # SERVICIO 2: LA BASE DE DATOS (MySQL)
+  # -------------------------------------------------
   db:
     image: mysql:8.0
     container_name: tablero-db
     environment:
-      
-      - MYSQL_ROOT_PASSWORD=mi_contraseña_secreta 
-      - MYSQL_DATABASE=indicadores_db           
+      - MYSQL_ROOT_PASSWORD=mi_contraseña_secreta
+      - MYSQL_DATABASE=indicadores_db
     ports:
-      - "3306:3306" 
+      - "3306:3306"
     volumes:
-      - mysql-data:/var/lib/mysql 
+      - mysql-data:/var/lib/mysql # Persistencia de datos
     networks:
       - mi-red-tablero
-    
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost", "-u", "root", "-pmi_contraseña_secreta"]
-      interval: 5s   
-      timeout: 5s    
-      retries: 20  
+      interval: 5s
+      timeout: 5s
+      retries: 20
 
+  # -------------------------------------------------
+  # SERVICIO 3: JENKINS (Automatización CI/CD)
+  # -------------------------------------------------
+  jenkins:
+    image: jenkins/jenkins:lts
+    container_name: jenkins-ci
+    user: root # Necesario para usar Docker dentro de Jenkins
+    ports:
+      - "8080:8080"   # Interfaz web de Jenkins
+      - "50000:50000" # Puerto para agentes
+    volumes:
+      - jenkins_data:/var/jenkins_home # Persistencia de configuración de Jenkins
+      - /var/run/docker.sock:/var/run/docker.sock # Permite a Jenkins controlar Docker del host
+    networks:
+      - mi-red-tablero
 
+# Red interna para comunicación entre contenedores
 networks:
   mi-red-tablero:
     driver: bridge
 
-
+# Volúmenes para guardar datos permanentemente
 volumes:
   mysql-data:
+  jenkins_data:
