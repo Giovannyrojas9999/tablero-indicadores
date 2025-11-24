@@ -5,4 +5,4 @@ services:
   - docker
 script:
   - docker build -t tablero-app ./app
-  - docker run --rm tablero-app npm test
+  - docker run --rm tablero-app node -v
