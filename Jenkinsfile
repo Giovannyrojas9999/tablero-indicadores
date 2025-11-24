@@ -27,12 +27,21 @@ pipeline {
         }
 
         stage('Pruebas Unitarias') {
+
             steps {
+
                 script {
 
-                    bat "docker run --rm ${IMAGE_NAME}:latest node -e \"console.log('Pruebas simuladas exitosas');\""
+                    echo 'Ejecutando pruebas automatizadas con Jest...'
+
+                    // Comando 'bat' ajustado para Windows
+
+                    bat "docker run --rm -v %WORKSPACE%/app:/app -w /app node:18-alpine sh -c \"npm install && npm test\""
+
                 }
+
             }
+
         }
 
         stage('Despliegue') {
