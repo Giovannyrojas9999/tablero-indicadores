@@ -6,6 +6,13 @@ pipeline {
     }
 
     stages {
+        stage('🧹 Limpiar Workspace') {
+            steps {
+                // Limpia el directorio de trabajo antes de empezar
+                cleanWs()
+            }
+        }
+
         stage('📥 Clonar Repositorio') {
             steps {
                 checkout scm
@@ -23,10 +30,7 @@ pipeline {
             steps {
                 script {
                     echo 'Ejecutando pruebas automatizadas con Jest...'
-                    // Comando 'bat' ajustado para Windows:
-                    // 1. Usamos %WORKSPACE% para variables de entorno
-                    // 2. Escapamos las comillas internas con \
-                    // 3. Usamos rutas relativas simples para evitar problemas de path
+                    // Comando 'bat' ajustado para Windows
                     bat "docker run --rm -v %WORKSPACE%/app:/app -w /app node:18-alpine sh -c \"npm install && npm test\""
                 }
             }
