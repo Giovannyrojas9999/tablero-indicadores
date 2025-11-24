@@ -19,15 +19,11 @@ pipeline {
             }
         }
 
-        stage(' Pruebas Unitarias') {
+        stage('Pruebas Unitarias') {
             steps {
                 script {
                     echo 'Ejecutando pruebas automatizadas con Jest...'
-                    // Comando 'bat' ajustado para Windows:
-                    // 1. Usamos %WORKSPACE% para variables de entorno
-                    // 2. Escapamos las comillas internas con \
-                    // 3. Usamos rutas relativas simples para evitar problemas de path
-                    bat "docker run --rm -v %WORKSPACE%/app:/app -w /app node:18-alpine sh -c \"npm install && npm test\""
+                    bat "docker run --rm -v %WORKSPACE%/app:/source -w /tmp/app node:18-alpine sh -c \"cp -r /source/. . && npm install && npm test\""
                 }
             }
         }
