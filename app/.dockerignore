@@ -6,3 +6,13 @@ Dockerfile
 build
 dist
 
+#### 2. Confirmar que `.dockerignore` está en GitHub
+
+Es posible que hayas creado el archivo localmente pero no lo hayas subido. Jenkins descarga lo que está en GitHub, no lo que tienes en tu PC (a menos que el `Jenkinsfile` lo copie, pero aquí Jenkins clona el repo).
+
+Ejecuta esto en tu terminal para asegurarte de subirlo:
+
+```bash
+git add .dockerignore
+git commit -m "Asegurar que .dockerignore está en el repo"
+git push origin main
