@@ -22,7 +22,7 @@ pipeline {
         stage('🏗️ Construir Imagen') {
             steps {
                 // Usamos 'bat' para comandos de Windows
-                bat "docker build -t ${IMAGE_NAME}:latest ./app"
+                bat "docker build --no-cache -t ${IMAGE_NAME}:latest ./app"
             }
         }
 
