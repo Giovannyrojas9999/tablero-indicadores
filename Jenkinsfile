@@ -6,37 +6,36 @@ pipeline {
     }
 
     stages {
-        stage('🧹 Limpiar Workspace') {
+        stage('Limpiar Workspace') {
             steps {
                 // Limpia el directorio de trabajo antes de empezar
                 cleanWs()
             }
         }
 
-        stage('📥 Clonar Repositorio') {
+        stage('Clonar Repositorio') {
             steps {
                 checkout scm
             }
         }
 
-        stage('🏗️ Construir Imagen') {
+        stage('Construir Imagen') {
             steps {
                 // Usamos 'bat' para comandos de Windows
                 bat "docker build --no-cache -t ${IMAGE_NAME}:latest ./app"
             }
         }
 
-        stage('🧪 Pruebas Unitarias') {
+        stage(' Pruebas Unitarias') {
             steps {
                 script {
-                    echo 'Ejecutando pruebas automatizadas con Jest...'
-                    // Comando 'bat' ajustado para Windows
-                    bat "docker run --rm -v %WORKSPACE%/app:/app -w /app node:18-alpine sh -c \"npm install && npm test\""
+                    echo 'Ejecutando pruebas sobre la imagen construida...'
+                    bat "docker run --rm ${IMAGE_NAME}:latest npm test"
                 }
             }
         }
 
-        stage('🚀 Despliegue') {
+        stage('Despliegue') {
             steps {
                 // Comandos 'bat' para reiniciar contenedores
                 bat "docker-compose down"
@@ -47,10 +46,10 @@ pipeline {
     
     post {
         success {
-            echo '✅ Pipeline finalizado correctamente.'
+            echo 'Pipeline finalizado correctamente.'
         }
         failure {
-            echo '❌ El Pipeline falló. Revisa los logs.'
+            echo 'El Pipeline falló. Revisa los logs.'
         }
     }
 }
