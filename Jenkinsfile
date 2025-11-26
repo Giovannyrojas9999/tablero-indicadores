@@ -43,16 +43,16 @@ pipeline {
         stage('Despliegue') {
             steps {
                 script {
+                    echo '---- INICIANDO DESPLIEGUE SEGURO ----' 
                     // 1. Detenemos SOLO la app y la bd (dejamos a Jenkins vivo)
                     bat "docker-compose stop app db"
                     bat "docker-compose rm -f app db"
 
-                    // 2. Limpieza de seguridad por si quedaron hurfanos
+                    // 2. Limpieza de seguridad
                     bat "docker rm -f tablero-app || ver > nul"
                     bat "docker rm -f tablero-db || ver > nul"
 
                     // 3. Levantamos SOLO la app y la bd
-                    // Especificamos los nombres de los servicios al final
                     bat "docker-compose up -d --force-recreate app db"
                 }
             }
