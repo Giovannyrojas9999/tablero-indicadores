@@ -47,7 +47,7 @@ pipeline {
                     bat "docker-compose stop app db"
                     bat "docker-compose rm -f app db"
 
-                    // 2. Limpieza de seguridad por si quedaron huérfanos
+                    // 2. Limpieza de seguridad por si quedaron hurfanos
                     bat "docker rm -f tablero-app || ver > nul"
                     bat "docker rm -f tablero-db || ver > nul"
 
