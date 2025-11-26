@@ -1,0 +1,5 @@
+app:
+  build:
+    image: tablero-app
+    dockerfile: Dockerfile
+  cached: true

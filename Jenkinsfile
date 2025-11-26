@@ -43,18 +43,20 @@ pipeline {
         stage('Despliegue') {
             steps {
                 script {
-                    // Bajamos contenedores viejos y limpiamos 
-                    bat "docker-compose down --remove-orphans"
-                    
-                    // Aseguramos que no queden contenedores bloqueados 
-                    bat "docker rm -f tablero-app || ver > nul"
+                    // 1. Detenemos SOLO la app y la bd (dejamos a Jenkins vivo)
+                    bat "docker-compose stop app db"
+                    bat "docker-compose rm -f app db"
 
-                    // Levantamos todo de nuevo forzando la recreación
-                    bat "docker-compose up -d --force-recreate"
+                    // 2. Limpieza de seguridad por si quedaron huérfanos
+                    bat "docker rm -f tablero-app || ver > nul"
+                    bat "docker rm -f tablero-db || ver > nul"
+
+                    // 3. Levantamos SOLO la app y la bd
+                    // Especificamos los nombres de los servicios al final
+                    bat "docker-compose up -d --force-recreate app db"
                 }
             }
         }
-    }
     
     post {
         success {
